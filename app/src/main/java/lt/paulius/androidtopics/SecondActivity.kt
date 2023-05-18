@@ -46,6 +46,7 @@ class SecondActivity : ActivityLifecycles() {
             putString(SECOND_ACTIVITY_ITEM_ID, idEditText.text.toString())
             putString(SECOND_ACTIVITY_ITEM_TEXT01, text01EditText.text.toString())
             putString(SECOND_ACTIVITY_ITEM_TEXT02, text02EditText.text.toString())
+            putInt(SECOND_ACTIVITY_FINISH_INTENT_STATUS, finishIntentStatus)
         }
         super.onSaveInstanceState(outState)
     }
@@ -57,6 +58,7 @@ class SecondActivity : ActivityLifecycles() {
             idEditText.setText(this.getString(SECOND_ACTIVITY_ITEM_ID))
             text01EditText.setText(this.getString(SECOND_ACTIVITY_ITEM_TEXT01))
             text02EditText.setText(this.getString(SECOND_ACTIVITY_ITEM_TEXT02))
+            finishIntentStatus = this.getInt(SECOND_ACTIVITY_FINISH_INTENT_STATUS)
         }
     }
 
@@ -97,8 +99,12 @@ class SecondActivity : ActivityLifecycles() {
 
     companion object {
         const val SECOND_ACTIVITY_ITEM_ID = "lt.paulius.androidtopics.secondactivity_item_id"
-        const val SECOND_ACTIVITY_ITEM_TEXT01 = "lt.paulius.androidtopics.secondactivity_item_text01"
-        const val SECOND_ACTIVITY_ITEM_TEXT02 = "lt.paulius.androidtopics.secondactivity_item_text02"
+        const val SECOND_ACTIVITY_ITEM_TEXT01 =
+            "lt.paulius.androidtopics.secondactivity_item_text01"
+        const val SECOND_ACTIVITY_ITEM_TEXT02 =
+            "lt.paulius.androidtopics.secondactivity_item_text02"
+        const val SECOND_ACTIVITY_FINISH_INTENT_STATUS =
+            "lt.paulius.androidtopics.secondactivity_finish_intent_status"
 
         const val SECOND_ACTIVITY_ITEM_INTENT_RETURN_NEW = 101
         const val SECOND_ACTIVITY_ITEM_INTENT_RETURN_UPDATE = 102

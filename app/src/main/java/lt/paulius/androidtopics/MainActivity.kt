@@ -12,9 +12,10 @@ import timber.log.Timber
 
 class MainActivity : ActivityLifecycles() {
 
-//    private lateinit var clickButton: Button
+    //    private lateinit var clickButton: Button
     private lateinit var adapter: CustomAdapter
-//    private lateinit var itemListView: ListView
+
+    //    private lateinit var itemListView: ListView
     private var itemIndex = -1
     private lateinit var binding: ActivityMainBinding
 
@@ -37,6 +38,19 @@ class MainActivity : ActivityLifecycles() {
         setClickOpenItemDetails()
         setUpOnClickListener()
 
+    }
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(MAIN_ACTIVITY_SAVE_INSTANCE_STATE_ITEM_INDEX, itemIndex)
+        timber("onSaveInstanceState \nindex value is $itemIndex")
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        itemIndex = savedInstanceState.getInt(MAIN_ACTIVITY_SAVE_INSTANCE_STATE_ITEM_INDEX)
+        timber("onRestoreInstanceState \nindex value is $itemIndex")
     }
 
     private fun generateListOfItems(items: MutableList<Item>) {
@@ -128,5 +142,7 @@ class MainActivity : ActivityLifecycles() {
         const val MAIN_ACTIVITY_ITEM_ID = "lt.paulius.androidtopics_item_id"
         const val MAIN_ACTIVITY_ITEM_TEXT01 = "lt.paulius.androidtopics_item_text01"
         const val MAIN_ACTIVITY_ITEM_TEXT02 = "lt.paulius.androidtopics_item_text02"
+        const val MAIN_ACTIVITY_SAVE_INSTANCE_STATE_ITEM_INDEX =
+            "lt.paulius.androidtopics_save_instance_state_item_index"
     }
 }
