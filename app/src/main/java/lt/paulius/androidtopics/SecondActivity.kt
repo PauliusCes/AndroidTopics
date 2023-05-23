@@ -2,39 +2,29 @@ package lt.paulius.androidtopics
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 
 class SecondActivity : ActivityLifecycles() {
 
-    private lateinit var idEditText: EditText
+    private lateinit var idEditText: TextView
     private lateinit var text01EditText: EditText
     private lateinit var text02EditText: EditText
     private lateinit var closeButton: Button
     private lateinit var saveButton: Button
     private var finishIntentStatus = SECOND_ACTIVITY_ITEM_INTENT_RETURN_UPDATE
+    private lateinit var item: Item
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
 
-        idEditText = findViewById(R.id.idEditText)
+        idEditText = findViewById(R.id.idTextViewSA)
         text01EditText = findViewById(R.id.text01EditText)
         text02EditText = findViewById(R.id.text02EditText)
         closeButton = findViewById(R.id.closeButton)
         saveButton = findViewById(R.id.saveButton)
-
-//        if (savedInstanceState != null) {
-//            with(savedInstanceState) {
-//                idEditText.setText(getString(SECOND_ACTIVITY_ITEM_ID))
-//                text01EditText.setText(getString(SECOND_ACTIVITY_ITEM_TEXT01))
-//                text02EditText.setText(getString(SECOND_ACTIVITY_ITEM_TEXT02))
-//            }
-//        } else {
-//            getIntentExtra()
-//
-//        }
-
 
         getIntentExtra()
         setClickListenerOfCloseButton()
@@ -63,19 +53,31 @@ class SecondActivity : ActivityLifecycles() {
     }
 
     private fun getIntentExtra() {
+        if (intent.hasExtra(MainActivity.MAIN_ACTIVITY_ITEM_INTENT_OBJECT)) {
 
-        val itemId: Int = intent.getIntExtra(MainActivity.MAIN_ACTIVITY_ITEM_ID, -1)
-        val itemText01 = intent.getStringExtra(MainActivity.MAIN_ACTIVITY_ITEM_TEXT01) ?: ""
-        val itemText02 = intent.getStringExtra(MainActivity.MAIN_ACTIVITY_ITEM_TEXT02) ?: ""
+            item = getExtraFromParcelable(
+                intent,
+                MainActivity.MAIN_ACTIVITY_ITEM_INTENT_OBJECT
+            ) ?: Item(-1, "", "")
 
-        if (itemId >= 0) {
-            idEditText.setText(itemId.toString())
-            text01EditText.setText(itemText01)
-            text02EditText.setText(itemText02)
-        } else {
+            idEditText.setText(item.id.toString())
+            text01EditText.setText(item.text01)
+            text02EditText.setText(item.text02)
+
+
+        } else if (intent.hasExtra(MainActivity.MAIN_ACTIVITY_ITEM_INTENT_ID)) {
+
+            idEditText.setText(
+                intent
+                    .getIntExtra(MainActivity.MAIN_ACTIVITY_ITEM_INTENT_ID, -1)
+                    .toString()
+            )
             finishIntentStatus = SECOND_ACTIVITY_ITEM_INTENT_RETURN_NEW
-        }
 
+        } else {
+
+            finishIntentStatus = RESULT_CANCELED
+        }
     }
 
     private fun setClickListenerOfCloseButton() {
@@ -86,11 +88,31 @@ class SecondActivity : ActivityLifecycles() {
 
     private fun setClickListenerOfSaveButton() {
         saveButton.setOnClickListener {
+
             val finishIntent = Intent()
 
-            finishIntent.putExtra(SECOND_ACTIVITY_ITEM_ID, (idEditText.text.toString()).toInt())
-            finishIntent.putExtra(SECOND_ACTIVITY_ITEM_TEXT01, text01EditText.text.toString())
-            finishIntent.putExtra(SECOND_ACTIVITY_ITEM_TEXT02, text02EditText.text.toString())
+            when (finishIntentStatus) {
+                SECOND_ACTIVITY_ITEM_INTENT_RETURN_NEW -> {
+                    val item = Item(
+                        idEditText.text.toString().toInt(),
+                        text01EditText.text.toString(),
+                        text02EditText.text.toString()
+                    )
+                    finishIntent.putExtra(SECOND_ACTIVITY_ITEM_INTENT_RETURN_OBJECT, item)
+                }
+
+                SECOND_ACTIVITY_ITEM_INTENT_RETURN_UPDATE -> {
+
+                    item.text01 = text01EditText.text.toString()
+                    item.text02 = text02EditText.text.toString()
+
+                    finishIntent.putExtra(SECOND_ACTIVITY_ITEM_INTENT_RETURN_OBJECT, item)
+                }
+            }
+
+            if (idEditText.text.toString().toInt() < 0) {
+                finishIntentStatus = RESULT_CANCELED
+            }
 
             setResult(finishIntentStatus, finishIntent)
             finish()
@@ -98,6 +120,8 @@ class SecondActivity : ActivityLifecycles() {
     }
 
     companion object {
+        const val SECOND_ACTIVITY_ITEM_INTENT_RETURN_OBJECT =
+            "lt.paulius.androidtopics.secondactivity_item_intent_return_object"
         const val SECOND_ACTIVITY_ITEM_ID = "lt.paulius.androidtopics.secondactivity_item_id"
         const val SECOND_ACTIVITY_ITEM_TEXT01 =
             "lt.paulius.androidtopics.secondactivity_item_text01"

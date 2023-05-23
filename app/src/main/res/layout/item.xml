@@ -11,24 +11,39 @@
 
         <TextView
             android:id="@+id/idTextView"
-            android:text="id"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="id" />
 
         <TextView
             android:id="@+id/text01TextView"
-            android:text="text01"
-            android:layout_marginLeft="16dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="text01" />
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/text02TextView"
-        android:text="text02"
-        android:layout_marginLeft="32dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:text="text02" />
+
+    <TextView
+        android:id="@+id/creationDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="96dp"
+        android:text="creation date" />
+
+    <TextView
+        android:id="@+id/updateDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="96dp"
+        android:text="update date" />
+
 
 </LinearLayout>

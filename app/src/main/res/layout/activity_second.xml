@@ -15,8 +15,8 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/idEditText"
+        <TextView
+            android:id="@+id/idTextViewSA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
