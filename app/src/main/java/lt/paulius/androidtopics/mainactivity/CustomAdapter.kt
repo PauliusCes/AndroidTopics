@@ -1,12 +1,12 @@
-package lt.paulius.androidtopics
+package lt.paulius.androidtopics.mainactivity
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.TextView
 import lt.paulius.androidtopics.databinding.ItemBinding
+import lt.paulius.androidtopics.repository.Item
 
 class CustomAdapter(context: Context) : BaseAdapter() {
 
@@ -25,6 +25,7 @@ class CustomAdapter(context: Context) : BaseAdapter() {
     }
 
     fun add(items: List<Item>) {
+        list.clear()
         list.addAll(items)
         notifyDataSetChanged()
     }

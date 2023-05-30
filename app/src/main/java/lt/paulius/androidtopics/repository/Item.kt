@@ -1,4 +1,4 @@
-package lt.paulius.androidtopics
+package lt.paulius.androidtopics.repository
 
 import android.os.Parcelable
 import kotlinx.parcelize.IgnoredOnParcel
