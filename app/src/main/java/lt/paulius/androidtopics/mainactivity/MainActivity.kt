@@ -6,10 +6,8 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import lt.paulius.androidtopics.ActivityLifecycles
 import lt.paulius.androidtopics.R
@@ -56,8 +54,8 @@ class MainActivity : ActivityLifecycles() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                activityViewModel.itemsStateFlow.collect { listOfItems ->
-                    adapter.add(listOfItems)
+                activityViewModel.uiState.collect { uiState ->
+                    adapter.add(uiState.items)
                 }
             }
         }
