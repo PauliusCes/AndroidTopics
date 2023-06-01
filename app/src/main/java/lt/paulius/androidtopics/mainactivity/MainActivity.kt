@@ -1,5 +1,6 @@
 package lt.paulius.androidtopics.mainactivity
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import lt.paulius.androidtopics.ActivityLifecycles
 import lt.paulius.androidtopics.R
@@ -33,6 +35,7 @@ class MainActivity : ActivityLifecycles() {
 
         setupObservables()
 
+        onItemLongClick()
         setClickOpenItemDetails()
     }
 
@@ -59,6 +62,26 @@ class MainActivity : ActivityLifecycles() {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                activityViewModel.isDeletedUiState.collect { isDeleted ->
+                    if (isDeleted) {
+                        displaySnackBar("Item was deleted from repository")
+                    } else {
+                        displaySnackBar("Item wasn't deleted from repository")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun onItemLongClick() {
+        binding.itemListView.setOnItemLongClickListener { adapterView, view, position, l ->
+            val item = adapterView.getItemAtPosition(position) as Item
+            displayDeleteItemAlertDialog(item)
+            true
+        }
     }
 
     private fun setClickOpenItemDetails() {
@@ -70,6 +93,31 @@ class MainActivity : ActivityLifecycles() {
 
             startActivity(intent)
         }
+    }
+
+    private fun displayDeleteItemAlertDialog(item: Item) {
+        AlertDialog
+            .Builder(this)
+            .setTitle("Delete")
+            .setMessage("Do you really want to delete this item?")
+            .setIcon(R.drawable.ic_icon_24)
+            .setPositiveButton("Yes") { _, _ ->
+                activityViewModel.deleteItem(item)
+                adapter.remove(item)
+            }
+            .setNegativeButton("No", null)
+            .show()
+    }
+
+    private fun displaySnackBar(message: String) {
+        Snackbar
+            .make(
+                binding.openSecondActivityButton,
+                message,
+                Snackbar.LENGTH_LONG
+            )
+            .setAnchorView(binding.openSecondActivityButton)
+            .show()
     }
 
     companion object {
