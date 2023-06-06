@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.AbsListView
+import android.widget.AbsListView.OnScrollListener
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
@@ -32,7 +34,7 @@ class MainActivity : ActivityLifecycles() {
         binding.lifecycleOwner = this
 
         setUpListView()
-
+        onScrollListView()
         setupObservables()
 
         onItemLongClick()
@@ -42,6 +44,11 @@ class MainActivity : ActivityLifecycles() {
     override fun onResume() {
         super.onResume()
         activityViewModel.fetchItems()
+        if (adapter.getMaxId() != -1) {
+            binding.itemListView.smoothScrollToPosition(
+                activityViewModel.positionListViewStateFLow.value
+            )
+        }
     }
 
     fun setClickOpenSecondActivity(view: View) {
@@ -52,6 +59,31 @@ class MainActivity : ActivityLifecycles() {
         adapter = CustomAdapter(this)
         binding.itemListView.adapter = adapter
     }
+
+    private fun onScrollListView() {
+//        binding.itemListView.setOnScrollListener(
+//            object : OnScrollListener {
+//                override fun onScrollStateChanged(p0: AbsListView?, p1: Int) {
+//
+//                }
+//
+//                override fun onScroll(p0: AbsListView?, position: Int, p2: Int, p3: Int) {
+//                    if (activityViewModel.positionListViewStateFLow.value != position) {
+//                        activityViewModel.savePositionListView(position)
+//                    }
+//                }
+//            }
+//        )
+
+        binding.itemListView.setOnScrollChangeListener { _, _, _, _, _ ->
+            val position = binding.itemListView.firstVisiblePosition
+
+            if (activityViewModel.positionListViewStateFLow.value != position) {
+                activityViewModel.savePositionListView(position)
+            }
+        }
+    }
+
 
     private fun setupObservables() {
 
@@ -75,7 +107,16 @@ class MainActivity : ActivityLifecycles() {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                activityViewModel.positionListViewStateFLow.collect { firstVisiblePosition ->
+                    displaySnackBar("First visible item index: $firstVisiblePosition")
+                }
+            }
+        }
     }
+
 
     private fun onItemLongClick() {
         binding.itemListView.setOnItemLongClickListener { adapterView, view, position, l ->
