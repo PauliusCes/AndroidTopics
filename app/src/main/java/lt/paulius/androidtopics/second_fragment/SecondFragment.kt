@@ -33,6 +33,7 @@ class SecondFragment : FragmentLifecyclesPresentation() {
     }
 
     companion object {
+        const val TAG = "second_fragment"
         fun newInstance() = SecondFragment()
     }
 
