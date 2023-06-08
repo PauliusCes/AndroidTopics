@@ -2,6 +2,7 @@ package lt.paulius.androidtopics.common
 
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import lt.paulius.androidtopics.R
