@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import lt.paulius.androidtopics.R
 import lt.paulius.androidtopics.databinding.FragmentFirstBinding
 
@@ -24,6 +25,13 @@ class FirstFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.openButton.setOnClickListener { view ->
+            view.findNavController().navigate(R.id.action_firstFragment_to_secondFragment)
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -33,3 +41,4 @@ class FirstFragment : Fragment() {
         fun newInstance() = FirstFragment()
     }
 }
+
