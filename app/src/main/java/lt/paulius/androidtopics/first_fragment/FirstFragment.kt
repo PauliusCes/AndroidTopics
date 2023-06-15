@@ -11,7 +11,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
-import lt.paulius.androidtopics.R
 import lt.paulius.androidtopics.databinding.FragmentFirstBinding
 
 class FirstFragment : Fragment() {
@@ -32,21 +31,47 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.fetchUsers()
+//        viewModel.fetchUsers()
+        viewModel.fetchTopNews()
+//        userStateFlow()
+        observeTopNewsStateFlow()
+    }
+
+    private fun userStateFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.itemsStateFlow.collect { response ->
-//                    Log.i(TAG, "onViewCreated: ${listOfItems?.userList}")
+                    //                    Log.i(TAG, "onViewCreated: ${listOfItems?.userList}")
                     val list = response?.userList
 
                     Log.i(TAG, "onViewCreated: $list")
 
-//                    var myText = ""
+                    //                    var myText = ""
                     if (list != null) {
-//                        for (item in list) {
-//                            myText += "{${item}\n\n"
-//                        }
+                        //                        for (item in list) {
+                        //                            myText += "{${item}\n\n"
+                        //                        }
 
+                        val stringBuilder = buildString {
+                            list.forEach { append("$it\n\n") }
+                        }
+                        binding.textView.text = stringBuilder
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeTopNewsStateFlow() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.topNewsStateFlow.collect { response ->
+
+                    val list = response?.articles
+
+                    Log.i(TAG, "onViewCreated: $list")
+
+                    if (list != null) {
                         val stringBuilder = buildString {
                             list.forEach { append("$it\n\n") }
                         }
