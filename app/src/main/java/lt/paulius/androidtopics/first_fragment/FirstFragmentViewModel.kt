@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import lt.paulius.androidtopics.repository.news_api.NewsApiServiceClient
+import lt.paulius.androidtopics.repository.news_api.NewsApiServiceClientWithOkHttp
 import lt.paulius.androidtopics.repository.news_api.TopHeadlinesResponse
 import lt.paulius.androidtopics.repository.reqres.ReqresServiceClient
 import lt.paulius.androidtopics.repository.reqres.UsersResponse
@@ -30,8 +31,11 @@ class FirstFragmentViewModel : ViewModel() {
 
     fun fetchTopNews() {
         viewModelScope.launch(Dispatchers.IO) {
-            val resp = NewsApiServiceClient.providesApiService().getTopNews("us")
+//            val resp = NewsApiServiceClient.providesApiService().getTopNews("us")
+            val resp = NewsApiServiceClientWithOkHttp.providesApiService().getTopNews("us")
             _topNewsStateFlow.value = resp.body()
         }
     }
+
+
 }

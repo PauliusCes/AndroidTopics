@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
+import lt.paulius.androidtopics.common.MainActivity
 import lt.paulius.androidtopics.databinding.FragmentFirstBinding
 
 class FirstFragment : Fragment() {
@@ -33,8 +34,16 @@ class FirstFragment : Fragment() {
 
 //        viewModel.fetchUsers()
         viewModel.fetchTopNews()
+        clickOpenButton()
 //        userStateFlow()
         observeTopNewsStateFlow()
+    }
+
+    private fun clickOpenButton() {
+        binding.openButton.setOnClickListener {
+            (activity as MainActivity).openSecondFragment()
+        }
+
     }
 
     private fun userStateFlow() {
